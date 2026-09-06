@@ -30,7 +30,7 @@ def get_products():
             )
             data = cursor.fetchall()
 
-            if data is None:
+            if data is None or not data:
                 return jsonify({"message": "Products are not found."}), 404
 
             for prod in data:

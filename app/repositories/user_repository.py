@@ -1,5 +1,6 @@
 from app.database.connection import get_connection
 
+
 def find_user_by_email(email):
     conn = None
 
@@ -24,9 +25,11 @@ def find_user_by_email(email):
             )
 
             return cursor.fetchone()
+
     finally:
         if conn:
             conn.close()
+
 
 def find_user_by_id(user_id):
     conn = None
@@ -51,7 +54,7 @@ def find_user_by_id(user_id):
             )
 
             return cursor.fetchone()
+
     finally:
         if conn:
             conn.close()
-        

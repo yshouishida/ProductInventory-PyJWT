@@ -15,7 +15,3 @@ DB_CONFIG = {
 
 def get_connection():
     return mysql.connect(**DB_CONFIG)
-
-
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-JWT_ACCESS_TOKEN_EXPIRES = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRES"))

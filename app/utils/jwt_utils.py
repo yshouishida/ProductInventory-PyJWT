@@ -2,20 +2,32 @@ import jwt
 import uuid
 from functools import wraps
 from flask import request, jsonify, g
+
 from datetime import datetime, timedelta, timezone
-from app.database.connection import JWT_ACCESS_TOKEN_EXPIRES, JWT_SECRET_KEY
+
+from app.config.settings import (
+    JWT_ACCESS_TOKEN_EXPIRES,
+    JWT_SECRET_KEY
+)
 from app.utils.token_blocklist import TOKEN_BLOCKLIST
 
 def create_access_token(identity, role):
+
     jti = str(uuid.uuid4())
+
     payload = {
         "sub": str(identity),
+        "role": role,
         "jti": jti,
-        "exp": datetime.now(timezone.utc) + timedelta(seconds=JWT_ACCESS_TOKEN_EXPIRES),
-        "role": role
+        "exp": (datetime.now(timezone.utc) + timedelta (seconds=JWT_ACCESS_TOKEN_EXPIRES)
+        )
     }
-    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm="HS256") 
-    return token
+
+    return jwt.encode(
+        payload,
+        JWT_SECRET_KEY,
+        algorithm="HS256"
+    )
 
 
 def token_required(f):
@@ -36,6 +48,9 @@ def token_required(f):
             g.jwt_payload  = payload
             g.user_id = payload.get("sub")
             g.user_role = payload.get("role")
+
+            print(f"Setting g.user_id = {payload.get('sub')}")
+            print(f"Setting g.user_role = {payload.get('role')}")
 
         except jwt.ExpiredSignatureError:
             return jsonify({"message": "Token has expired. Please login again."}), 401

@@ -3,8 +3,8 @@ import uuid
 from functools import wraps
 from flask import request, jsonify, g
 from datetime import datetime, timedelta, timezone
-from config import JWT_ACCESS_TOKEN_EXPIRES, JWT_SECRET_KEY
-from token_blocklist import TOKEN_BLOCKLIST
+from app.database.connection import JWT_ACCESS_TOKEN_EXPIRES, JWT_SECRET_KEY
+from app.utils.token_blocklist import TOKEN_BLOCKLIST
 
 def create_access_token(identity, role):
     jti = str(uuid.uuid4())

@@ -8,19 +8,7 @@ from app.repositories.product_repository import (
 
 
 def fetch_all_products_service(user_id):
-    product = fetch_all_products(user_id)
-
-    if product is None:
-        return None
-
-    return {
-        "id": product["id"],
-        "code": product["code"],
-        "name": product["name"],
-        "description": product["description"],
-        "qty": product["qty"],
-        "price": product["price"]
-    }
+    return fetch_all_products(user_id)
 
 def fetch_by_id_service(id, user_id):
     product = fetch_by_id(id, user_id)
@@ -47,13 +35,3 @@ def update_product_service(id, code, name, description, qty, price, user_id):
 
 def delete_product_service(id, user_id):
     return delete_product(id, user_id)
-
-
-
-# id,
-# code,
-# name,
-# description,
-# qty,
-# price
-# FROM tblProduct

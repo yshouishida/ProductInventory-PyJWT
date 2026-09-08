@@ -15,7 +15,9 @@ def fetch_all_product():
     if product is None:
         return jsonify({"message": "Products has not found."}), 404
 
-    return jsonify(**product)
+    return jsonify(product)
+
+
 
 def fetch_by_id(id):
     user_id = g.user_id

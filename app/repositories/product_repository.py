@@ -1,5 +1,4 @@
 from app.database.connection import get_connection
-from flask import g
 
 def fetch_all_products(user_id):
     conn = None
@@ -72,7 +71,8 @@ def add_product(code, name, description, qty, price, user_id):
                     code, name, description, qty, price, user_id
                 )
             )
-            return cursor.commit()
+            return conn.commit()
+        
     finally:
         if conn:
             conn.close()
@@ -95,7 +95,7 @@ def update_product(id, code, name, description, qty, price, user_id):
                 WHERE id = %s AND user_id = %s
                 """,
                 (
-                    id, code, name, description, qty, price, user_id
+                    code, name, description, qty, price, id, user_id
                 )
             )
             return conn.commit()
@@ -113,7 +113,7 @@ def delete_product(id, user_id):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                DELETE FROM tblProduct WHERE id = %s
+                DELETE FROM tblProduct WHERE id = %s AND user_id = %s
                 """,
                 (id, user_id)
             )

@@ -38,3 +38,5 @@ def login(email, password):
 def get_current_user(user_id):
 
     return find_user_by_id(user_id)
+
+

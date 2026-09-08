@@ -22,12 +22,8 @@ def create_access_token(identity, role):
         "exp": (datetime.now(timezone.utc) + timedelta (seconds=JWT_ACCESS_TOKEN_EXPIRES)
         )
     }
-
-    return jwt.encode(
-        payload,
-        JWT_SECRET_KEY,
-        algorithm="HS256"
-    )
+    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm="HS256")
+    return token
 
 
 def token_required(f):
@@ -48,6 +44,7 @@ def token_required(f):
             g.jwt_payload  = payload
             g.user_id = payload.get("sub")
             g.user_role = payload.get("role")
+            g.jti = jti
 
             print(f"Setting g.user_id = {payload.get('sub')}")
             print(f"Setting g.user_role = {payload.get('role')}")

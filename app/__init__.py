@@ -4,8 +4,10 @@ def create_app():
     app = Flask(__name__)
 
     from app.routes.auth_routes import auth_bp
+    from app.routes.product_routes import product_bp
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(product_bp)
     return app
 
 

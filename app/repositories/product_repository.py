@@ -71,8 +71,8 @@ def add_product(code, name, description, qty, price, user_id):
                     code, name, description, qty, price, user_id
                 )
             )
-            return conn.commit()
-        
+            conn.commit()
+        return True
     finally:
         if conn:
             conn.close()
@@ -98,7 +98,8 @@ def update_product(id, code, name, description, qty, price, user_id):
                     code, name, description, qty, price, id, user_id
                 )
             )
-            return conn.commit()
+            conn.commit()
+        return True
         
     finally:
         if conn:
@@ -117,8 +118,8 @@ def delete_product(id, user_id):
                 """,
                 (id, user_id)
             )
-            return conn.commit()
-
+            conn.commit()
+        return True
     finally:
         if conn:
             conn.close()

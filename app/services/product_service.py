@@ -26,7 +26,17 @@ def fetch_by_id_service(id, user_id):
     }
 
 def add_product_service(code, name, description, qty, price, user_id):
-    return add_product(code, name, description, qty, price, user_id)
+
+    try:
+        result = add_product(code, name, description, qty, price, user_id)
+
+        if not result:
+            return None
+
+        return result
+    except Exception as e:
+        return {str(e)}
+        
 
 
 def update_product_service(id, code, name, description, qty, price, user_id):

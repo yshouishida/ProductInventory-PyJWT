@@ -1,6 +1,10 @@
 from app.database.connection import get_connection
 
-def fetch_all_products(user_id):
+
+#=======================================
+#  GET ALL PRODUCTS
+#=======================================
+def get_products_repo(user_id):
     conn = None
 
     try:
@@ -9,7 +13,7 @@ def fetch_all_products(user_id):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT
+                SELECT 
                     id,
                     code,
                     name,
@@ -21,22 +25,26 @@ def fetch_all_products(user_id):
                 """,
                 (user_id,)
             )
-
-        return cursor.fetchall()
-    
+            return cursor.fetchall()
+        
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()
 
-def fetch_by_id(id, user_id):
+#=======================================
+#  GET ID BY ID
+#=======================================
+def get_by_id_repo(id, user_id):
     conn = None
 
     try:
         conn = get_connection()
+
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT
+                SELECT 
                     id,
                     code,
                     name,
@@ -49,63 +57,78 @@ def fetch_by_id(id, user_id):
                 (id, user_id)
             )
             return cursor.fetchone()
+        
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()
+        
 
-
-def add_product(code, name, description, qty, price, user_id):
+#=======================================
+#  ADD PRODUCT
+#=======================================
+def add_product_repo(code, name, description, qty, price, user_id):
     conn = None
 
     try:
         conn = get_connection()
+
         with conn.cursor() as cursor:
             cursor.execute(
                 """
                 INSERT INTO tblProduct
                     (code, name, description, qty, price, user_id)
-                VALUES
-                    (%s, %s, %s, %s, %s, %s)
+                VALUES(%s, %s, %s, %s, %s, %s)
                 """,
-                (
-                    code, name, description, qty, price, user_id
-                )
+                (code, name, description, qty, price, user_id)
             )
-            conn.commit()
+        conn.commit()
         return True
+    
+    except Exception as e:
+        if conn: conn.rollback()
+        print(f"Error: {e}")
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()
 
-def update_product(id, code, name, description, qty, price, user_id):
+#=======================================
+#  UPDATE PRODUCT
+#=======================================
+def update_product_repo(code, name, description, qty, price, id, user_id):
     conn = None
 
     try:
         conn = get_connection()
+
         with conn.cursor() as cursor:
             cursor.execute(
                 """
                 UPDATE tblProduct
                 SET 
-                    code = %s, 
-                    name = %s, 
-                    description = %s, 
-                    qty = %s, 
-                    price = %s
-                WHERE id = %s AND user_id = %s
+                    code        = %s,
+                    name        = %s,
+                    description = %s,
+                    qty         = %s,
+                    price       = %s
+                WHERE id        = %s
+                AND user_id     = %s
                 """,
-                (
-                    code, name, description, qty, price, id, user_id
-                )
+                (code, name, description, qty, price, id, user_id)
             )
-            conn.commit()
+        conn.commit()
         return True
-        
+    
+    except Exception as e:
+        if conn: conn.rollback()
+        print(f"Error: {e}")
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()
+        
 
-def delete_product(id, user_id):
+#=======================================
+#  DELETE PRODUCT
+#=======================================
+def delete_product_repo(id, user_id):
     conn = None
 
     try:
@@ -118,8 +141,11 @@ def delete_product(id, user_id):
                 """,
                 (id, user_id)
             )
-            conn.commit()
+        conn.commit()
         return True
+
+    except Exception as e:
+        if conn: conn.rollback()    
+        print(f"Error: {e}")
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()

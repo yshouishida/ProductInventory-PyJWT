@@ -5,7 +5,7 @@ from app.services.auth_services import (
     get_current_user as get_current_user_service
 )
 
-from app.utils.token_blocklist import TOKEN_BLOCKLIST
+from app.utils.blocklit_token import TOKEN_BLOCKLIST
 
 
 def login():

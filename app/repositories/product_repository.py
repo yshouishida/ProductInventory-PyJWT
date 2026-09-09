@@ -147,11 +147,11 @@ def delete_product_repo(id, user_id):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT id FROM tblProduct WHERE id = %s AND user_id %s
+                SELECT id FROM tblProduct WHERE id = %s AND user_id = %s
                 """,
                 (id, user_id)
             )
-            if cursor.fetchone() is None:
+            if not cursor.fetchone():
                 return False
 
             cursor.execute(

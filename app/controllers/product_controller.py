@@ -56,7 +56,7 @@ def add_product_control():
     if result is None:
         return error("Unable to add product.", 401)
 
-    return success("Added successfully.", 201)
+    return success("Added successfully.", 201, result)
 
 
 #=======================================
@@ -78,7 +78,7 @@ def update_product_control(id):
     if result is None:
         return error("Unable to update product.", 401)
 
-    return success("Updated successfully.", 200)
+    return success("Updated successfully.", 200, result)
     
 # update_product_services(code, name, description, qty, price, id, user_id):
 
@@ -92,7 +92,7 @@ def delete_product_control(id):
     if result is None:
         return error("Unable to delete product", 401)
 
-    return success("Deleted successfully.", 200)
+    return success("Deleted successfully.", 200, result)
 
 
 # id user_id

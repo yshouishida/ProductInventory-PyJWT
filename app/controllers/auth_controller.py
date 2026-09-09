@@ -1,11 +1,11 @@
-from flask import request, g
+from flask import request, g, jsonify
 
 from app.services.auth_services import (
     login as login_service,
     get_current_user as get_current_user_service
 )
 
-from app.utils.blocklit_token import TOKEN_BLOCKLIST
+from app.utils.blocklist_token import TOKEN_BLOCKLIST
 from app.utils.api_response import success, error
 
 
@@ -24,7 +24,7 @@ def login():
     if result is None:
         return error("Invalid email or password.", 401)
 
-    return success("Login successfully!", 200, **result)
+    return success("Login successfully.", 200, result)
 
 
 def get_current_user():
@@ -34,7 +34,7 @@ def get_current_user():
     if user is None:
         return error("User was not found", 404)
 
-    return success()
+    return success("Current user who logged in: ", 200, user)
 
 def logout_user():
     jti = g.jti

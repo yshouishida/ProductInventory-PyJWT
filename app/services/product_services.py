@@ -11,8 +11,10 @@ from app.repositories.product_repository import(
 #=======================================
 def get_products_services(user_id):
     products = get_products_repo(user_id)
-    for prod in products:
-        prod["price"] = float(prod["price"])
+
+    if products:
+        for prod in products:
+            prod["price"] = float(prod["price"])
 
     return products
         
@@ -23,7 +25,8 @@ def get_products_services(user_id):
 def get_by_id_services(id, user_id):
     product = get_by_id_repo(id, user_id)
 
-    product["price"] = float(product["price"])
+    if product:
+        product["price"] = float(product["price"])
 
     return product
 

@@ -1,7 +1,9 @@
 from app.database.connection import get_connection
 
-
-def find_user_by_email(email):
+#======================================= 
+# GET ALL USERS
+#=======================================
+def get_users_repo():
     conn = None
 
     try:
@@ -10,28 +12,26 @@ def find_user_by_email(email):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT 
-                    u.id,
-                    u.first_name,
-                    u.last_name,
-                    u.email,
-                    u.password,
-                    r.name AS role
-                FROM tblUser u
-                JOIN tblRole r ON u.role_id = r.id
-                WHERE u.email = %s
-                """,
-                (email,)
+                SELECT
+                    id,
+                    first_name,
+                    last_name,
+                    email,
+                    DATE_FORMAT(created_at, '%b %d, %Y %l:%i%p') as created_at,
+                    DATE_FORMAT(updated_at, '%b %d, %Y %l:%i%p') as updated_at
+                FROM tblUser
+                """
             )
-
-            return cursor.fetchone()
-
+            return cursor.fetchall()
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()
 
-
-def find_user_by_id(user_id):
+#======================================= 
+# GET USER BY ID
+#=======================================
+def get_by_id_repo(id):
     conn = None
 
     try:
@@ -40,21 +40,34 @@ def find_user_by_id(user_id):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT 
-                    u.id,
-                    u.first_name,
-                    u.last_name,
-                    u.email,
-                    r.name AS role
-                FROM tblUser u
-                JOIN tblRole r ON u.role_id = r.id
-                WHERE u.id = %s
+                SELECT
+                    id,
+                    first_name,
+                    last_name,
+                    email,
+                    DATE_FORMAT(created_at, '%%b %%d, %%Y %%l:%%i%%p') as created_at,
+                    DATE_FORMAT(updated_at, '%%b %%d, %%Y %%l:%%i%%p') as updated_at
+                FROM tblUser
+                WHERE id = %s
                 """,
-                (user_id,)
+                (id,)
             )
-
             return cursor.fetchone()
 
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()
+
+#======================================= 
+# ADD USER
+#=======================================
+
+#======================================= 
+# UPDATE USER
+#=======================================
+
+#======================================= 
+# DELETE USER
+#=======================================
+

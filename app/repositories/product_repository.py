@@ -103,6 +103,16 @@ def update_product_repo(code, name, description, qty, price, id, user_id):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
+                SELECT id FROM tblProduct WHERE id = %s AND user_id = %s
+                """,
+                (id, user_id)
+            )
+            if cursor.fetchone() is None:
+                return False
+
+
+            cursor.execute(
+                """
                 UPDATE tblProduct
                 SET 
                     code        = %s,
@@ -137,6 +147,15 @@ def delete_product_repo(id, user_id):
         with conn.cursor() as cursor:
             cursor.execute(
                 """
+                SELECT id FROM tblProduct WHERE id = %s AND user_id %s
+                """,
+                (id, user_id)
+            )
+            if cursor.fetchone() is None:
+                return False
+
+            cursor.execute(
+                """
                 DELETE FROM tblProduct WHERE id = %s AND user_id = %s
                 """,
                 (id, user_id)
@@ -147,5 +166,6 @@ def delete_product_repo(id, user_id):
     except Exception as e:
         if conn: conn.rollback()    
         print(f"Error: {e}")
+        return False
     finally:
         if conn: conn.close()

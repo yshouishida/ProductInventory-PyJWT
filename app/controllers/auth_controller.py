@@ -1,4 +1,4 @@
-from flask import jsonify, request, g
+from flask import request, g
 
 from app.services.auth_services import (
     login as login_service,
@@ -6,6 +6,7 @@ from app.services.auth_services import (
 )
 
 from app.utils.blocklit_token import TOKEN_BLOCKLIST
+from app.utils.api_response import success, error
 
 
 def login():
@@ -16,21 +17,14 @@ def login():
     password = data.get("password")
 
     if not email or not password:
-        return jsonify({
-            "message": "Email and password are required."
-        }), 400
+        return error("Email and password are required.", 400)
 
     result = login_service(email, password)
 
     if result is None:
-        return jsonify({
-            "message": "Invalid email or password."
-        }), 401
+        return error("Invalid email or password.", 401)
 
-    return jsonify({
-        "message": "Login successfully!",
-        **result
-    }), 200
+    return success("Login successfully!", 200, **result)
 
 
 def get_current_user():
@@ -38,24 +32,13 @@ def get_current_user():
     user = get_current_user_service(g.user_id)
 
     if user is None:
-        return jsonify({
-            "message": "User has not found."
-        }), 404
+        return error("User was not found", 404)
 
-    return jsonify({
-        "message": "Currently who logged in:",
-        "user": {
-            "id": user["id"],
-            "first_name": user["first_name"],
-            "last_name": user["last_name"],
-            "email": user["email"],
-            "role": user["role"]
-        }
-    }), 200
+    return success()
 
 def logout_user():
     jti = g.jti
     TOKEN_BLOCKLIST.add(jti)
 
-    return jsonify({"message": "Logout successfully."}), 200
+    return success("Logout successfully!", 200)
     

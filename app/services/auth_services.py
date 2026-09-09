@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash
 
-from app.repositories.user_repository import (
+from app.repositories.authrepository import (
     find_user_by_email,
     find_user_by_id
 )
@@ -20,7 +20,7 @@ def login(email, password):
 
     access_token = create_access_token(
         str(user["id"]),
-        user["role"]
+        str(user["role"])
     )
 
     return {

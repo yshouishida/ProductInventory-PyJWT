@@ -38,7 +38,7 @@ def token_required(f):
             g.jti = jti
             g.jwt_payload = payload
             g.user_id = int(payload.get("sub"))
-            g.user_role = payload.get("role")
+            g.user_role = str(payload.get("role"))
 
         except jwt.ExpiredSignatureError:
             return jsonify({"message": "Token has been expired. Please login again."}), 401
@@ -57,7 +57,8 @@ def role_required(required_role):
         def decorated(*args, **kwargs):
             user_role = g.user_role
 
-            if user_role != required_role:
+            if user_role.lower() != required_role.lower():
+                print(f"Role Required: {role_required}, User Role: {user_role}")
                 return jsonify({"message": f"Access denied. {required_role} role required."}), 401
 
             return f(*args, **kwargs)

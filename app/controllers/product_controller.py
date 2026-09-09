@@ -6,7 +6,10 @@ from app.services.product_services import (
     delete_product_services
 )
 
-from flask import jsonify, request, g
+from flask import request, g
+from app.utils.api_response import success, error
+from app.utils.api_response import success, error
+
 
 #=======================================
 #  GET ALL PRODUCTS
@@ -16,9 +19,9 @@ def get_products_control():
     products = get_products_services(user_id)
 
     if products is None:
-        return jsonify({"message": "Products was not found."}), 404
+        return error("Product was not found", 404)
 
-    return jsonify(products), 200
+    return success("Product retrieved.", 200, products)
 
 
 
@@ -30,9 +33,9 @@ def get_by_id_control(id):
     product = get_by_id_services(id, user_id)
 
     if product is None:
-        return jsonify({"message": "Product was not found."}), 404
+        return error("Product was not found.", 404)
 
-    return jsonify(product), 200
+    return success("Get successfully.", 200, product)
 
 
 #=======================================
@@ -51,9 +54,9 @@ def add_product_control():
     )
 
     if result is None:
-        return jsonify({"message": "Unable to add product."}), 401
+        return error("Unable to add product.", 401)
 
-    return jsonify({"message": "Added successfully."}), 201
+    return success("Added successfully.", 201)
 
 
 #=======================================
@@ -73,9 +76,9 @@ def update_product_control(id):
     )
 
     if result is None:
-        return jsonify({"message": "Unable to update product."}), 401
+        return error("Unable to update product.", 401)
 
-    return jsonify({"message": "Updated successfully."}), 200
+    return success("Updated successfully.", 200)
     
 # update_product_services(code, name, description, qty, price, id, user_id):
 
@@ -87,9 +90,9 @@ def delete_product_control(id):
     result = delete_product_services(id, user_id)
 
     if result is None:
-        return jsonify({"message": "Unable to delete product."}), 401
+        return error("Unable to delete product", 401)
 
-    return jsonify({"message": "Deleted successfull."}), 200
+    return success("Deleted successfully.", 200)
 
 
 # id user_id

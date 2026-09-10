@@ -1,0 +1,22 @@
+
+# Visual Studio
+.vs/
+**/.vs/
+
+# Build output
+bin/
+obj/
+
+# Python
+__pycache__/
+__pycache__
+*.py[cod]
+.venv/
+venv/
+.env
+
+# C# user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates

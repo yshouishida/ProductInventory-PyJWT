@@ -63,7 +63,7 @@ def get_by_id_repo(id):
 # ADD USER
 #=======================================
 
-def create_user_repo(first_name, last_name, email, password):
+def add_user_repo(first_name, last_name, email, password):
     conn = None
 
     try:
@@ -151,6 +151,7 @@ def delete_user_repo(id):
                 """,
                 (id,)
             )
+            
         conn.commit()
         return True
         

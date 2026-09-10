@@ -8,7 +8,6 @@ from app.services.product_services import (
 
 from flask import request, g
 from app.utils.api_response import success, error
-from app.utils.api_response import success, error
 
 
 #=======================================

@@ -13,13 +13,17 @@ def get_users_repo():
             cursor.execute(
                 """
                 SELECT
-                    id,
-                    first_name,
-                    last_name,
-                    email,
-                    DATE_FORMAT(created_at, '%b %d, %Y %l:%i%p') as created_at,
-                    DATE_FORMAT(updated_at, '%b %d, %Y %l:%i%p') as updated_at
-                FROM tblUser
+                    u.id,
+                    u.first_name,
+                    u.last_name,
+                    u.email,
+                    r.name as role,
+                    r.status,
+                    DATE_FORMAT(u.created_at,'%b %d, %Y %l:%i%p') AS created_at,
+                    DATE_FORMAT(u.updated_at, '%b %d, %Y %l:%i%p') AS updated_at
+                    FROM tblUser u
+                    INNER JOIN tblRole r
+                ON u.role_id = r.id
                 """
             )
             return cursor.fetchall()
@@ -41,14 +45,18 @@ def get_by_id_repo(id):
             cursor.execute(
                 """
                 SELECT
-                    id,
-                    first_name,
-                    last_name,
-                    email,
-                    DATE_FORMAT(created_at, '%%b %%d, %%Y %%l:%%i%%p') as created_at,
-                    DATE_FORMAT(updated_at, '%%b %%d, %%Y %%l:%%i%%p') as updated_at
-                FROM tblUser
-                WHERE id = %s
+                    u.id,
+                    u.first_name,
+                    u.last_name,
+                    u.email,
+                    r.name as role,
+                    r.status,
+                    DATE_FORMAT(u.created_at, '%%b %%d, %%Y %%l:%%i%%p') AS created_at,
+                    DATE_FORMAT(u.updated_at, '%%b %%d, %%Y %%l:%%i%%p') AS updated_at
+                FROM tblUser u
+                INNER JOIN tblRole r
+                ON u.role_id = r.id
+                WHERE u.id = %s;
                 """,
                 (id,)
             )

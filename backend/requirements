@@ -6,3 +6,6 @@ werkzeug
 
 Just copy this to install
 pip install Flask PyMySQL Flask-JWT-Extended python-dotenv werkzeug
+
+
+

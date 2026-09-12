@@ -1,15 +1,14 @@
 import jwt
 import uuid
 from functools import wraps
-from flask import request, g
-from backend.utils.api_response import error
-from datetime import datetime, timezone, timedelta
-from backend.utils.blocklist_token import TOKEN_BLOCKLIST
 from backend.config.settings import JWT_ACCESS_TOKEN_EXPIRES, JWT_SECRET_KEY
-
+from backend.utils.blocklist_token import TOKEN_BLOCKLIST
+from backend.utils.api_response import error
+from datetime import datetime, timedelta, timezone
+from flask import request, g
 
 def create_access_token(identity, user_role):
-    jti = str(uuid.uuid4())
+    jti = str(uuid.uuid4)
     payload = {
         "sub": str(identity),
         "jti": jti,
@@ -22,7 +21,6 @@ def create_access_token(identity, user_role):
 
 def token_required(f):
     @wraps(f)
-
     def decorated(*args, **kwargs):
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
@@ -35,16 +33,18 @@ def token_required(f):
             if jti in TOKEN_BLOCKLIST:
                 return error("Token has been revoked.", 401)
             g.jti = jti
+            g.jwt_payload = payload
             g.user_id = int(payload.get("sub"))
             g.user_role = payload.get("role")
-            g.jwt_paload = payload
+            
 
         except jwt.ExpiredSignatureError:
-            return error("Token has been expired. Please login again.", 401)
+            return error("Token has expired. Please login again.", 401)
         except jwt.InvalidTokenError:
-            return error("Invalid token.", 401)
+            return error ("Invalid token.", 401)
 
         return f(*args, **kwargs)
+
     return decorated
 
 
@@ -55,10 +55,11 @@ def role_required(required_role):
         def decorated(*args, **kwargs):
             user_role = g.user_role
 
-            if user_role.lower() != required_role.lower():
+            if required_role.lower() != user_role.lower():
                 return error(f"Access denied. {required_role} role required.", 401)
 
             return f(*args, **kwargs)
+        
         return decorated
-    return decorator            
 
+    return decorator

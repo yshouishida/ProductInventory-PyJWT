@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash
 
-from backend.repositories.authrepository import (
+from backend.repositories.auth_repository import (
     find_user_by_email,
     find_user_by_id
 )

@@ -26,21 +26,20 @@ namespace prfProductInventory.Forms
 
                 if (response.IsSuccessStatusCode)
                 {
-                    ApiResponse<User> result = JsonSerializer.Deserialize<ApiResponse<User>>(json);
-                    User user = result.data;
+                    ApiResponse<User> apiResponse = JsonSerializer.Deserialize<ApiResponse<User>>(json);
+                    User user = apiResponse.data;
 
                     tslblUser.Text = $"User: {user.last_name}, {user.first_name}";
                 }
                 else
                 {
-                    ApiResponse<User> result = JsonSerializer.Deserialize<ApiResponse<User>>(json); 
-
-                    tslblUser.Text = $"Error: {result.message}";
+                    ApiResponse<User> apiResponse = JsonSerializer.Deserialize<ApiResponse<User>>(json);
+                    tslblUser.Text = $"Error: {apiResponse.message}";
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -79,22 +78,17 @@ namespace prfProductInventory.Forms
         {
             if (dgvProductList.CurrentRow == null)
             {
-                MessageBox.Show("Please select a record to delete.");
+                MessageBox.Show("Please select a product to delete.");
                 return;
             }
 
             if (MessageBox.Show(
-                "Do you want to delete this record?",
-                "Confirmation",
+                "Do you want to delete this product?",
+                "Delete confirmation",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information
-                ) == DialogResult.No)
-            {
-                return;
-            }
+                MessageBoxIcon.Exclamation) == DialogResult.No) return;
 
             int productId = Convert.ToInt32(dgvProductList.CurrentRow.Cells["id"].Value);
-
 
             try
             {
@@ -103,24 +97,18 @@ namespace prfProductInventory.Forms
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("Deleted successfully.");
+                    MessageBox.Show("Deleted sucessfully.");
                     await LoadProducts();
                 }
                 else
                 {
-                    MessageBox.Show(json, "Unable to delete");
+                    MessageBox.Show(json, "Unable to delete product.");
                 }
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                MessageBox.Show(ex.Message);
             }
-
-
-            await LoadProducts();
-
-
         }
 
         private async void tsBtnLogout_Click(object sender, EventArgs e)
@@ -151,14 +139,16 @@ namespace prfProductInventory.Forms
                 }
                 else
                 {
-                    MessageBox.Show(json, "Error");
+                    MessageBox.Show(json, "Unable to get products.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}");
+                MessageBox.Show(ex.Message);
             }
         }
+
+
 
 
         private async Task Logout()

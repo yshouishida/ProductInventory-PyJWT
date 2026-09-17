@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 from flask import request, g
 
 def create_access_token(identity, user_role):
-    jti = str(uuid.uuid4)
+    jti = str(uuid.uuid4())
     payload = {
         "sub": str(identity),
         "jti": jti,

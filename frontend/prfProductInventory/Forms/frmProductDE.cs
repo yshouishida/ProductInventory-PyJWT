@@ -38,37 +38,28 @@ namespace prfProductInventory.Forms
             if (IsEdit) await GetById();
         }
 
-        private async void btnSave_Click(object sender, EventArgs e)
-        {
-            if (IsEdit)
-            {
-                await UpdateProduct();
-            }
-            else
-            {
-                await AddProduct();
-            }
-        }
+        private async void btnSave_Click(object sender, EventArgs e) => await (IsEdit ? UpdateProduct() : AddProduct());
 
         private async Task UpdateProduct()
         {
             try
             {
-                Product product = new Product
+                Product prod = new Product
                 {
                     id = ProductId,
                     code = txtCode.Text,
-                    name = txtName.Text,
                     description = txtDesc.Text,
+                    name = txtName.Text,
                     qty = Convert.ToInt32(txtQty.Text),
                     price = Convert.ToDouble(txtPrice.Text)
                 };
 
-                string json = JsonSerializer.Serialize(product);
+                string cJson = JsonSerializer.Serialize(prod);
 
-                using (StringContent content = new StringContent(json, Encoding.UTF8, "application/json"))
+                using (StringContent content = new StringContent(cJson, Encoding.UTF8, "application/json"))
                 {
                     HttpResponseMessage response = await client.PutAsync($"{BASE_URL}/{ProductId}", content);
+                    string json = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -77,13 +68,13 @@ namespace prfProductInventory.Forms
                     }
                     else
                     {
-                        MessageBox.Show(json, "Unable to update");
+                        MessageBox.Show(json, "Unable to update product.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -100,11 +91,12 @@ namespace prfProductInventory.Forms
                     price = Convert.ToDouble(txtPrice.Text)
                 };
 
-                string json = JsonSerializer.Serialize(prod);
+                string cJson = JsonSerializer.Serialize(prod);
 
-                using (StringContent content = new StringContent(json, Encoding.UTF8, "application/json"))
+                using (StringContent content = new StringContent(cJson, Encoding.UTF8, "application/json"))
                 {
                     HttpResponseMessage response = await client.PostAsync($"{BASE_URL}", content);
+                    string json = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -113,13 +105,13 @@ namespace prfProductInventory.Forms
                     }
                     else
                     {
-                        MessageBox.Show(json,"Unable to add");
+                        MessageBox.Show(json, "Unable to add product.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                MessageBox.Show(ex.Message);
             }
         }
 
